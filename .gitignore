@@ -119,8 +119,8 @@ celerybeat.pid
 # SageMath parsed files
 *.sage.py
 
-# Environments
-.env
+# Environments — ALL .env files everywhere in the repo (secrets live in root .env only)
+**/.env
 .venv
 env/
 venv/
@@ -158,3 +158,13 @@ cython_debug/
 #  and can be added to the global gitignore or merged into this file.  For a more nuclear
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
+claude-certification/claude-main.zip
+claude-certification/CCA-F-Two-Week-Sprint_1 1.pdf
+
+# Ruff cache
+.ruff_cache/
+
+# Pre-commit cache
+.pre-commit-cache/
+claude-certification/main.py
+resources/cheat_sheets/Python Cheat Sheet - The Basics.pdf

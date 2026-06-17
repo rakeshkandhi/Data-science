@@ -1,0 +1,45 @@
+[project]
+name = "ai-engineer-learning"
+version = "0.1.0"
+description = "AI Engineer learning path — notebooks and scripts for all modules"
+requires-python = ">=3.14"
+
+dependencies = [
+  "numpy",
+  "pandas",
+  "matplotlib",
+  "seaborn",
+  "scipy",
+  "anthropic",
+  "openai",
+  "jupyterlab",
+  "ipykernel",
+  "pydantic-settings",
+  "requests",
+]
+
+[dependency-groups]
+dev = ["pytest", "ruff", "mypy", "pre-commit"]
+
+# ---------------------------------------------------------------------------
+# Ruff — fast linter + import sorter (replaces flake8, isort)
+# ---------------------------------------------------------------------------
+[tool.ruff]
+line-length = 88
+target-version = "py314"
+
+[tool.ruff.lint]
+# E/W = pycodestyle, F = pyflakes, I = isort, UP = pyupgrade, B = bugbear
+select = ["E", "W", "F", "I", "UP", "B"]
+ignore = ["E501"]   # line-length handled by black
+
+[tool.ruff.lint.isort]
+known-first-party = ["utils", "config"]
+
+
+# ---------------------------------------------------------------------------
+# Mypy — type checking
+# ---------------------------------------------------------------------------
+[tool.mypy]
+python_version = "3.14"
+ignore_missing_imports = true

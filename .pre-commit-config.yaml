@@ -1,0 +1,57 @@
+# Pre-commit hooks for the AI Engineer learning repo
+# Runs automatically on every `git commit`
+#
+# Setup (one-time):
+#   uv sync
+#   uv run pre-commit install
+#
+# Run manually against all files:
+#   uv run pre-commit run --all-files
+
+repos:
+  # ---------------------------------------------------------------------------
+  # 1. General file hygiene
+  # ---------------------------------------------------------------------------
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: trailing-whitespace        # strip trailing spaces
+      - id: end-of-file-fixer          # ensure files end with a newline
+      - id: check-yaml                 # validate YAML syntax
+      - id: check-toml                 # validate TOML syntax
+      - id: check-json                 # validate JSON syntax
+      - id: check-merge-conflict       # catch leftover merge conflict markers
+      - id: check-added-large-files    # warn on files > 500 KB
+        args: ["--maxkb=500"]
+      - id: debug-statements           # catch forgotten breakpoint() / pdb calls
+      - id: mixed-line-ending          # normalise CRLF → LF
+        args: ["--fix=lf"]
+
+  # ---------------------------------------------------------------------------
+  # 2. Import sorting + linting  (ruff — replaces isort + flake8)
+  # ---------------------------------------------------------------------------
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.11.13
+    hooks:
+      - id: ruff                       # lint & auto-fix what it can
+        args: ["--fix", "--exit-non-zero-on-fix"]
+      - id: ruff-format                # ruff's own formatter (fast black-compatible)
+
+  # ---------------------------------------------------------------------------
+  # 4. Jupyter Notebook hygiene  (strip outputs before committing)
+  # ---------------------------------------------------------------------------
+  - repo: https://github.com/kynan/nbstripout
+    rev: 0.8.1
+    hooks:
+      - id: nbstripout                 # strips outputs + execution counts
+        args:
+          - --extra-keys
+          - metadata.kernelspec metadata.language_info
+
+  # ---------------------------------------------------------------------------
+  # 5. Secret detection  (never commit API keys)
+  # ---------------------------------------------------------------------------
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.24.3
+    hooks:
+      - id: gitleaks
