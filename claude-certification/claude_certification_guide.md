@@ -181,5 +181,6 @@
 
 - 🌐 Official: [anthropic.com/academy](https://www.anthropic.com/academy)
 - 📝 Exam Info: [claudecertifications.com](https://claudecertifications.com)
+- 📝 Exam: [exam link](https://anthropic.skilljar.com/claude-certified-architect-foundations-certification)
 - 🛠️ Claude API Docs: [docs.anthropic.com](https://docs.anthropic.com)
 - 🧩 MCP Docs: [modelcontextprotocol.io](https://modelcontextprotocol.io)

@@ -28,6 +28,7 @@ Data-science/
 ```
 
 Each module follows the pattern:
+
 ```
 03_machine_learning/
 ├── README.md                   # Module overview and learning goals
@@ -43,6 +44,7 @@ Each module follows the pattern:
 ## ⚙️ Setup
 
 ### Prerequisites
+
 - Python 3.11+
 - [`uv`](https://docs.astral.sh/uv/) package manager
 
@@ -64,22 +66,23 @@ uv run jupyter lab
 ```
 
 ### Using the shared environment in notebooks
+
 Select the kernel **`.venv (Python 3.x)`** in JupyterLab — it has all packages installed.
 
 ---
 
 ## 🗺️ Learning Path
 
-| # | Module | Status |
-|---|--------|--------|
-| 01 | Python Fundamentals | 🟡 In Progress |
-| 02 | Math for AI | 🔲 Planned |
-| 03 | Machine Learning | 🔲 Planned — *to be expanded* |
-| 04 | Deep Learning | 🔲 Planned |
-| 05 | NLP | 🔲 Planned |
-| 06 | LLMs & Generative AI | 🟡 In Progress |
-| 07 | MLOps | 🔲 Planned |
-| 08 | Data Engineering | 🔲 Planned |
+| #   | Module               | Status                        |
+| --- | -------------------- | ----------------------------- |
+| 01  | Python Fundamentals  | 🟡 In Progress                |
+| 02  | Math for AI          | 🔲 Planned                    |
+| 03  | Machine Learning     | 🔲 Planned — _to be expanded_ |
+| 04  | Deep Learning        | 🔲 Planned                    |
+| 05  | NLP                  | 🔲 Planned                    |
+| 06  | LLMs & Generative AI | 🟡 In Progress                |
+| 07  | MLOps                | 🔲 Planned                    |
+| 08  | Data Engineering     | 🔲 Planned                    |
 
 ---
 

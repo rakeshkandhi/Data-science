@@ -1,0 +1,9 @@
+- progressive summarization
+- speculative execution
+- context: fork` frontmatter
+- Code Generation with Claude Code — review Skills vs CLAUDE.md Scope concepts in the exam study guide
+- Code Generation with Claude Code — review Iterative Refinement concepts in the exam study guide.
+- Code Generation with Claude Code — review CLAUDE.md Configuration Hierarchy concepts in the exam study guide.
+- self-critique step (evaluator-optimizer pattern) 
+- separation of concerns
+- rolling summary vs parallel extraction
