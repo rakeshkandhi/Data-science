@@ -35,96 +35,168 @@ This module is about designing tools that are safe, discoverable, and easy for a
 ## Topic notes
 
 ### MCP specification
-**Pros:** Gives a common language for tools, resources, and prompts across hosts and servers.
-**Cons:** A spec only helps if implementers follow it carefully.
+- **What it is:** The Model Context Protocol contract that standardizes how hosts connect to servers exposing tools, resources, and prompts.
+- **When to use:** Use it when a scenario involves MCP specification and asks which mechanism, scope, boundary, or reliability pattern fits.
+- **Pros:** Gives a common language for tools, resources, and prompts across hosts and servers.
+- **Cons:** A spec only helps if implementers follow it carefully.
 
 ### MCP architecture
-**Pros:** Separates concerns cleanly between host, client, and server roles.
-**Cons:** Architectural clarity does not remove the need for careful boundary design.
+- **What it is:** The host-client-server structure used by MCP to separate model interaction from capability providers.
+- **When to use:** Use it when deciding where host, client, and server responsibilities belong.
+
+```mermaid
+flowchart LR
+  H[MCP host] --> C[MCP client]
+  C --> S[MCP server]
+  S --> T[Tools]
+  S --> R[Resources]
+  S --> P[Prompts]
+```
+- **Pros:** Separates concerns cleanly between host, client, and server roles.
+- **Cons:** Architectural clarity does not remove the need for careful boundary design.
 
 ### MCP host
-**Pros:** Central place to coordinate model, tools, and policy.
-**Cons:** Too much host logic can turn it into a second monolith.
+- **What it is:** The application that coordinates the model, MCP clients, policy, and user interaction.
+- **When to use:** Use it when a scenario involves MCP host and asks which mechanism, scope, boundary, or reliability pattern fits.
+- **Pros:** Central place to coordinate model, tools, and policy.
+- **Cons:** Too much host logic can turn it into a second monolith.
 
 ### MCP client
-**Pros:** Keeps the user-facing integration close to the interaction loop.
-**Cons:** Client behavior varies by environment, so portability is not automatic.
+- **What it is:** The connector inside a host that communicates with an MCP server.
+- **When to use:** Use it when a scenario involves MCP client and asks which mechanism, scope, boundary, or reliability pattern fits.
+- **Pros:** Keeps the user-facing integration close to the interaction loop.
+- **Cons:** Client behavior varies by environment, so portability is not automatic.
 
 ### MCP server
-**Pros:** Encapsulates capabilities behind a stable interface.
-**Cons:** Server bugs are now shared by every consumer of that capability.
+- **What it is:** A service that exposes capabilities such as tools, resources, and prompts over the MCP contract.
+- **When to use:** Use it when a scenario involves MCP server and asks which mechanism, scope, boundary, or reliability pattern fits.
+- **Pros:** Encapsulates capabilities behind a stable interface.
+- **Cons:** Server bugs are now shared by every consumer of that capability.
 
 ### initialization
-**Pros:** Sets capabilities and constraints up front, which reduces ambiguity later.
-**Cons:** If initialization is incomplete, later failures are harder to diagnose.
+- **What it is:** The startup handshake where client and server exchange protocol version, capabilities, and readiness.
+- **When to use:** Use it when a scenario involves initialization and asks which mechanism, scope, boundary, or reliability pattern fits.
+
+```mermaid
+sequenceDiagram
+  participant Host
+  participant Server
+  Host->>Server: initialize
+  Server-->>Host: capabilities
+  Host->>Server: initialized
+```
+- **Pros:** Sets capabilities and constraints up front, which reduces ambiguity later.
+- **Cons:** If initialization is incomplete, later failures are harder to diagnose.
 
 ### capabilities
-**Pros:** Make the available surface explicit and routable.
-**Cons:** Capability lists can become stale if they are not maintained.
+- **What it is:** The declared features a server or client supports, used for discovery and routing.
+- **When to use:** Use it when a scenario involves capabilities and asks which mechanism, scope, boundary, or reliability pattern fits.
+- **Pros:** Make the available surface explicit and routable.
+- **Cons:** Capability lists can become stale if they are not maintained.
 
 ### tools
-**Pros:** The right abstraction for actions that change state or fetch external data.
-**Cons:** Poorly defined tools become a liability instead of a capability.
+- **What it is:** Callable operations for actions, computations, or external data access.
+- **When to use:** Use it when the model needs an action, computation, or external data operation.
+
+```mermaid
+flowchart TD
+  A[Tool definition] --> B[Input schema]
+  B --> C[Execution]
+  C --> D[Output schema]
+  D --> E[Tool result]
+```
+- **Pros:** The right abstraction for actions that change state or fetch external data.
+- **Cons:** Poorly defined tools become a liability instead of a capability.
 
 ### resources
-**Pros:** Good for read-only data and reference material.
-**Cons:** If you blur resources with tools, you confuse access semantics.
+- **What it is:** Read-only context or data exposed by an MCP server.
+- **When to use:** Use it when the model needs read-only reference data rather than an action.
+- **Pros:** Good for read-only data and reference material.
+- **Cons:** If you blur resources with tools, you confuse access semantics.
 
 ### prompts
-**Pros:** Useful for reusable instruction templates and guided interactions.
-**Cons:** Prompts are not a control plane; they should not enforce behavior that belongs in code.
+- **What it is:** Reusable prompt templates or guided interactions exposed by an MCP server.
+- **When to use:** Use it when reusable guidance or a guided workflow should be discoverable.
+- **Pros:** Useful for reusable instruction templates and guided interactions.
+- **Cons:** Prompts are not a control plane; they should not enforce behavior that belongs in code.
 
 ### `resources/list`
-**Pros:** Helps clients discover available data sources.
-**Cons:** Discovery output still has to be kept accurate and small enough to scan.
+- **What it is:** The MCP operation for discovering available resources.
+- **When to use:** Use it when a scenario involves resources/list and asks which mechanism, scope, boundary, or reliability pattern fits.
+- **Pros:** Helps clients discover available data sources.
+- **Cons:** Discovery output still has to be kept accurate and small enough to scan.
 
 ### `prompts/list`
-**Pros:** Makes reusable prompt entries discoverable.
-**Cons:** Too many prompt entries create a weak, noisy menu.
+- **What it is:** The MCP operation for discovering available prompt templates.
+- **When to use:** Use it when a scenario involves prompts/list and asks which mechanism, scope, boundary, or reliability pattern fits.
+- **Pros:** Makes reusable prompt entries discoverable.
+- **Cons:** Too many prompt entries create a weak, noisy menu.
 
 ### tool definitions
-**Pros:** The contract is explicit and machine-checkable.
-**Cons:** Strong contracts take real work to design and maintain.
+- **What it is:** The metadata, schema, and description that define how a tool is selected and called.
+- **When to use:** Use it when a scenario involves tool definitions and asks which mechanism, scope, boundary, or reliability pattern fits.
+- **Pros:** The contract is explicit and machine-checkable.
+- **Cons:** Strong contracts take real work to design and maintain.
 
 ### `name`
-**Pros:** Stable identifier for routing and code references.
-**Cons:** A bad name leaks confusion into every layer that touches the tool.
+- **What it is:** A stable identifier used for routing, referencing, and disambiguating tools or skills.
+- **When to use:** Use it when a scenario involves name and asks which mechanism, scope, boundary, or reliability pattern fits.
+- **Pros:** Stable identifier for routing and code references.
+- **Cons:** A bad name leaks confusion into every layer that touches the tool.
 
 ### `title`
-**Pros:** Human-friendly label for browsing and selection.
-**Cons:** If the title diverges from the actual behavior, users and models both get misled.
+- **What it is:** A human-readable label for a tool or item.
+- **When to use:** Use it when a scenario involves title and asks which mechanism, scope, boundary, or reliability pattern fits.
+- **Pros:** Human-friendly label for browsing and selection.
+- **Cons:** If the title diverges from the actual behavior, users and models both get misled.
 
 ### `description`
-**Pros:** Usually the highest-leverage field for tool selection.
-**Cons:** Overwritten marketing copy is worse than no description.
+- **What it is:** A routing field that tells the agent when a tool, skill, or item should be selected.
+- **When to use:** Use it when a scenario involves description and asks which mechanism, scope, boundary, or reliability pattern fits.
+- **Pros:** Usually the highest-leverage field for tool selection.
+- **Cons:** Overwritten marketing copy is worse than no description.
 
 ### `inputSchema`
-**Pros:** Enforces the expected input shape before execution.
-**Cons:** Schemas can become cumbersome if you force every variation through one interface.
+- **What it is:** A JSON Schema contract that validates tool inputs before execution.
+- **When to use:** Use it when a scenario involves inputSchema and asks which mechanism, scope, boundary, or reliability pattern fits.
+- **Pros:** Enforces the expected input shape before execution.
+- **Cons:** Schemas can become cumbersome if you force every variation through one interface.
 
 ### `outputSchema`
-**Pros:** Makes downstream processing much easier to trust.
-**Cons:** Rigid outputs can be awkward for loosely structured results.
+- **What it is:** A schema contract that describes or validates the shape of tool results.
+- **When to use:** Use it when a scenario involves outputSchema and asks which mechanism, scope, boundary, or reliability pattern fits.
+- **Pros:** Makes downstream processing much easier to trust.
+- **Cons:** Rigid outputs can be awkward for loosely structured results.
 
 ### `annotations`
-**Pros:** Let you attach useful metadata without bloating the core contract.
-**Cons:** Metadata sprawl can obscure the actual behavior.
+- **What it is:** Optional metadata that adds hints or context without changing the core tool contract.
+- **When to use:** Use it when a scenario involves annotations and asks which mechanism, scope, boundary, or reliability pattern fits.
+- **Pros:** Let you attach useful metadata without bloating the core contract.
+- **Cons:** Metadata sprawl can obscure the actual behavior.
 
 ### MCP Inspector
-**Pros:** Useful for testing, debugging, and understanding a server interactively.
-**Cons:** It is a diagnostic tool, not a substitute for real client behavior testing.
+- **What it is:** An interactive diagnostic tool for inspecting and testing MCP servers.
+- **When to use:** Use it when a scenario involves MCP Inspector and asks which mechanism, scope, boundary, or reliability pattern fits.
+- **Pros:** Useful for testing, debugging, and understanding a server interactively.
+- **Cons:** It is a diagnostic tool, not a substitute for real client behavior testing.
 
 ### reference server implementations
-**Pros:** Good starting points and examples of expected patterns.
-**Cons:** Example code can ossify into cargo-culted architecture if you do not understand the tradeoffs.
+- **What it is:** Example MCP servers that demonstrate expected patterns and protocol behavior.
+- **When to use:** Use it when a scenario involves reference server implementations and asks which mechanism, scope, boundary, or reliability pattern fits.
+- **Pros:** Good starting points and examples of expected patterns.
+- **Cons:** Example code can ossify into cargo-culted architecture if you do not understand the tradeoffs.
 
 ### server quickstart
-**Pros:** Lowers adoption friction.
-**Cons:** Quickstarts often omit the hard edges that matter in production.
+- **What it is:** A minimal path for creating and running an MCP server.
+- **When to use:** Use it when a scenario involves server quickstart and asks which mechanism, scope, boundary, or reliability pattern fits.
+- **Pros:** Lowers adoption friction.
+- **Cons:** Quickstarts often omit the hard edges that matter in production.
 
 ### client quickstart
-**Pros:** Gets integrations moving fast and shows the main call flow.
-**Cons:** A quickstart client may hide important lifecycle and error-handling work.
+- **What it is:** A minimal path for connecting a host or client to an MCP server.
+- **When to use:** Use it when a scenario involves client quickstart and asks which mechanism, scope, boundary, or reliability pattern fits.
+- **Pros:** Gets integrations moving fast and shows the main call flow.
+- **Cons:** A quickstart client may hide important lifecycle and error-handling work.
 
 ## Exam pattern
 

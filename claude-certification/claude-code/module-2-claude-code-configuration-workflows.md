@@ -37,104 +37,171 @@ This module is about separating repository rules, user rules, and session state 
 ## Topic notes
 
 ### Claude Code overview
-**Pros:** Helps you reason about where config lives, how sessions behave, and which layer owns which decision.
-**Cons:** People often use the overview as a substitute for actually mapping their own repo rules.
+- **What it is:** A high-level map of Claude Code as a coding-agent environment with project instructions, settings, tools, skills, and sessions.
+- **When to use:** Use it when a scenario involves Claude Code overview and asks which mechanism, scope, boundary, or reliability pattern fits.
+- **Pros:** Helps you reason about where config lives, how sessions behave, and which layer owns which decision.
+- **Cons:** People often use the overview as a substitute for actually mapping their own repo rules.
 
 ### How Claude Code works
-**Pros:** Knowing the operational model makes configuration choices less arbitrary.
-**Cons:** The mechanics are easy to overgeneralize into rules that do not fit a specific repo.
+- **What it is:** The operating model for how Claude Code reads project context, follows configuration, runs tools, and manages an interactive coding session.
+- **When to use:** Use it when a scenario involves How Claude Code works and asks which mechanism, scope, boundary, or reliability pattern fits.
+- **Pros:** Knowing the operational model makes configuration choices less arbitrary.
+- **Cons:** The mechanics are easy to overgeneralize into rules that do not fit a specific repo.
 
 ### `.claude` directory
-**Pros:** A clear home for project-local state, memory, and support files.
-**Cons:** If you dump too much into it, the directory becomes an unstructured attic.
+- **What it is:** A project-local support directory for Claude Code configuration, commands, memories, hooks, or related agent files.
+- **When to use:** Use it when a scenario involves .claude directory and asks which mechanism, scope, boundary, or reliability pattern fits.
+- **Pros:** A clear home for project-local state, memory, and support files.
+- **Cons:** If you dump too much into it, the directory becomes an unstructured attic.
 
 ### store instructions and memories
-**Pros:** Separates durable guidance from ephemeral chat context.
-**Cons:** If everything becomes "memory," nothing is actually authoritative.
+- **What it is:** The separation between durable guidance the agent should follow and remembered project or user context it can reuse later.
+- **When to use:** Use it when a scenario involves store instructions and memories and asks which mechanism, scope, boundary, or reliability pattern fits.
+- **Pros:** Separates durable guidance from ephemeral chat context.
+- **Cons:** If everything becomes "memory," nothing is actually authoritative.
 
 ### manage sessions
-**Pros:** Keeps long-running work coherent and reduces accidental context loss.
-**Cons:** Session continuity can hide stale assumptions if you do not refresh intent explicitly.
+- **What it is:** The practices for starting, resuming, compacting, and continuing Claude Code conversations without confusing session state with durable config.
+- **When to use:** Use it when a scenario involves manage sessions and asks which mechanism, scope, boundary, or reliability pattern fits.
+
+```mermaid
+flowchart TD
+  A[Start Claude Code] --> B{Resume session?}
+  B -->|yes| C[Load prior conversation state]
+  B -->|no| D[Start fresh session]
+  C --> E[Continue task]
+  D --> E
+```
+- **Pros:** Keeps long-running work coherent and reduces accidental context loss.
+- **Cons:** Session continuity can hide stale assumptions if you do not refresh intent explicitly.
 
 ### common workflows
-**Pros:** Good for making repeated work predictable and reviewable.
-**Cons:** Workflows that are too rigid do not survive variation well.
+- **What it is:** Repeatable Claude Code operating patterns such as planning, editing, reviewing, testing, and committing.
+- **When to use:** Use it when a scenario involves common workflows and asks which mechanism, scope, boundary, or reliability pattern fits.
+- **Pros:** Good for making repeated work predictable and reviewable.
+- **Cons:** Workflows that are too rigid do not survive variation well.
 
 ### prompt library
-**Pros:** Reuse saves time and improves consistency.
-**Cons:** Libraries rot fast if they are not curated against real usage.
+- **What it is:** A reusable collection of prompts or command patterns for recurring tasks.
+- **When to use:** Use it when a scenario involves prompt library and asks which mechanism, scope, boundary, or reliability pattern fits.
+- **Pros:** Reuse saves time and improves consistency.
+- **Cons:** Libraries rot fast if they are not curated against real usage.
 
 ### best practices
-**Pros:** Encode what has already been learned to work in the repo.
-**Cons:** "Best practice" without a concrete scope becomes vague advice.
+- **What it is:** Project or workflow conventions that make Claude Code behavior predictable and easier to review.
+- **When to use:** Use it when a scenario involves best practices and asks which mechanism, scope, boundary, or reliability pattern fits.
+- **Pros:** Encode what has already been learned to work in the repo.
+- **Cons:** "Best practice" without a concrete scope becomes vague advice.
 
 ### settings
-**Pros:** Central point for behavior control.
-**Cons:** Too many settings produce hidden coupling and hard-to-debug precedence issues.
+- **What it is:** Configuration values that control Claude Code behavior across global, user, project, and local scopes.
+- **When to use:** Use it when a scenario involves settings and asks which mechanism, scope, boundary, or reliability pattern fits.
+
+```mermaid
+flowchart TD
+  A[Managed settings] --> B[User settings]
+  B --> C[Project settings]
+  C --> D[Local overrides]
+  D --> E[Claude Code behavior]
+```
+- **Pros:** Central point for behavior control.
+- **Cons:** Too many settings produce hidden coupling and hard-to-debug precedence issues.
 
 ### managed settings
-**Pros:** Strong governance for shared environments.
-**Cons:** Can feel restrictive when local experimentation is needed.
+- **What it is:** Organization-controlled settings that enforce policy across users or environments.
+- **When to use:** Use it when a scenario involves managed settings and asks which mechanism, scope, boundary, or reliability pattern fits.
+- **Pros:** Strong governance for shared environments.
+- **Cons:** Can feel restrictive when local experimentation is needed.
 
 ### permission settings
-**Pros:** Control the blast radius of risky operations.
-**Cons:** Excessively strict permissions make simple workflows annoying.
+- **What it is:** Configuration that controls which tools and operations Claude Code may run without additional approval.
+- **When to use:** Use it when a scenario involves permission settings and asks which mechanism, scope, boundary, or reliability pattern fits.
+- **Pros:** Control the blast radius of risky operations.
+- **Cons:** Excessively strict permissions make simple workflows annoying.
 
 ### project settings
-**Pros:** Keep behavior tied to the project instead of the person.
-**Cons:** They need maintenance as the project changes.
+- **What it is:** Repository-scoped settings intended to make behavior consistent for everyone working in that project.
+- **When to use:** Use it when a scenario involves project settings and asks which mechanism, scope, boundary, or reliability pattern fits.
+- **Pros:** Keep behavior tied to the project instead of the person.
+- **Cons:** They need maintenance as the project changes.
 
 ### user settings
-**Pros:** Good for personal defaults and comfort.
-**Cons:** A bad place to encode repo policy.
+- **What it is:** Personal settings for developer defaults and preferences across projects.
+- **When to use:** Use it when a scenario involves user settings and asks which mechanism, scope, boundary, or reliability pattern fits.
+- **Pros:** Good for personal defaults and comfort.
+- **Cons:** A bad place to encode repo policy.
 
 ### global settings
-**Pros:** Reduce repeated setup across projects.
-**Cons:** Global defaults can quietly override local intent if you are not careful.
+- **What it is:** Broad defaults that apply across many projects or environments unless overridden by narrower scopes.
+- **When to use:** Use it when a scenario involves global settings and asks which mechanism, scope, boundary, or reliability pattern fits.
+- **Pros:** Reduce repeated setup across projects.
+- **Cons:** Global defaults can quietly override local intent if you are not careful.
 
 ### skill files
-**Pros:** Package behavior into reusable, named units.
-**Cons:** If overused, they become another layer of indirection.
+- **What it is:** Files that package reusable agent behavior into named capabilities.
+- **When to use:** Use it when a scenario involves skill files and asks which mechanism, scope, boundary, or reliability pattern fits.
+- **Pros:** Package behavior into reusable, named units.
+- **Cons:** If overused, they become another layer of indirection.
 
 ### `SKILL.md`
-**Pros:** A durable contract for behavior and invocation.
-**Cons:** If the file is too broad, it stops being a useful contract.
+- **What it is:** The main instruction file that defines what a skill does, when it applies, and how it should operate.
+- **When to use:** Use it when a scenario involves SKILL.md and asks which mechanism, scope, boundary, or reliability pattern fits.
+- **Pros:** A durable contract for behavior and invocation.
+- **Cons:** If the file is too broad, it stops being a useful contract.
 
 ### `allowed-tools`
-**Pros:** Restricts what a skill can use, which improves safety and clarity.
-**Cons:** Too narrow and the skill becomes unusable.
+- **What it is:** Skill metadata that limits which tools a skill is allowed to use.
+- **When to use:** Use it when a scenario involves allowed-tools and asks which mechanism, scope, boundary, or reliability pattern fits.
+- **Pros:** Restricts what a skill can use, which improves safety and clarity.
+- **Cons:** Too narrow and the skill becomes unusable.
 
 ### `disable-model-invocation`
-**Pros:** Useful when a skill should only expose static behavior or deterministic steps.
-**Cons:** Removes flexibility when the task really does need model reasoning.
+- **What it is:** Skill metadata that prevents a skill from invoking the model when the behavior should remain static or deterministic.
+- **When to use:** Use it when a scenario involves disable-model-invocation and asks which mechanism, scope, boundary, or reliability pattern fits.
+- **Pros:** Useful when a skill should only expose static behavior or deterministic steps.
+- **Cons:** Removes flexibility when the task really does need model reasoning.
 
 ### `description`
-**Pros:** Gives fast routing signal and helps selection.
-**Cons:** Weak descriptions produce weak tool or skill choice.
+- **What it is:** A routing field that tells the agent when a tool, skill, or item should be selected.
+- **When to use:** Use it when a scenario involves description and asks which mechanism, scope, boundary, or reliability pattern fits.
+- **Pros:** Gives fast routing signal and helps selection.
+- **Cons:** Weak descriptions produce weak tool or skill choice.
 
 ### `name`
-**Pros:** Stable identifier for reuse and composition.
-**Cons:** Poor naming creates ambiguity across nested scopes.
+- **What it is:** A stable identifier used for routing, referencing, and disambiguating tools or skills.
+- **When to use:** Use it when a scenario involves name and asks which mechanism, scope, boundary, or reliability pattern fits.
+- **Pros:** Stable identifier for reuse and composition.
+- **Cons:** Poor naming creates ambiguity across nested scopes.
 
 ### `context: fork`
-**Pros:** Lets you branch work cleanly without contaminating the parent context.
-**Cons:** Forks increase the number of states you have to reconcile later.
+- **What it is:** A branching mode that isolates a workstream from the parent context while preserving the parent state.
+- **When to use:** Use it when related workstreams need isolation but still originate from the same parent task.
+- **Pros:** Lets you branch work cleanly without contaminating the parent context.
+- **Cons:** Forks increase the number of states you have to reconcile later.
 
 ### slash-command skills
-**Pros:** Fast access for common behaviors and workflows.
-**Cons:** They can become a second hidden API if documented poorly.
+- **What it is:** Skills exposed as command-like workflows for fast repeated invocation.
+- **When to use:** Use it when a scenario involves slash-command skills and asks which mechanism, scope, boundary, or reliability pattern fits.
+- **Pros:** Fast access for common behaviors and workflows.
+- **Cons:** They can become a second hidden API if documented poorly.
 
 ### nested skill variants
-**Pros:** Support specialization by directory or scope.
-**Cons:** More variants means more chance of accidental mismatch.
+- **What it is:** Directory-scoped skill variants that specialize behavior for a narrower part of a project.
+- **When to use:** Use it when a scenario involves nested skill variants and asks which mechanism, scope, boundary, or reliability pattern fits.
+- **Pros:** Support specialization by directory or scope.
+- **Cons:** More variants means more chance of accidental mismatch.
 
 ### code review automation
-**Pros:** Makes review repeatable and can catch obvious regressions early.
-**Cons:** Automated review is only as good as the policy and context it receives.
+- **What it is:** Automated checks or review workflows that inspect changes for defects, risks, and policy violations.
+- **When to use:** Use it when a scenario involves code review automation and asks which mechanism, scope, boundary, or reliability pattern fits.
+- **Pros:** Makes review repeatable and can catch obvious regressions early.
+- **Cons:** Automated review is only as good as the policy and context it receives.
 
 ### CI/CD integration
-**Pros:** Pushes validation closer to the change, which reduces surprises later.
-**Cons:** CI that mirrors bad local assumptions just automates the wrong thing faster.
+- **What it is:** Connecting Claude Code workflows to build, test, review, or deployment automation.
+- **When to use:** Use it when a scenario involves CI/CD integration and asks which mechanism, scope, boundary, or reliability pattern fits.
+- **Pros:** Pushes validation closer to the change, which reduces surprises later.
+- **Cons:** CI that mirrors bad local assumptions just automates the wrong thing faster.
 
 ## Exam pattern
 

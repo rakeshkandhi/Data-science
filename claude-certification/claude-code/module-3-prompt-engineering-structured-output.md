@@ -36,76 +36,134 @@ This module is about getting output that is stable enough to trust and automate.
 ## Topic notes
 
 ### Prompting best practices
-**Pros:** Gives you a principled baseline instead of ad hoc prompt edits.
-**Cons:** Best practices are generic; they still need adaptation to the task and output contract.
+- **What it is:** General prompt design principles for giving Claude clear goals, context, constraints, examples, and output expectations.
+- **When to use:** Use it when a scenario involves Prompting best practices and asks which mechanism, scope, boundary, or reliability pattern fits.
+- **Pros:** Gives you a principled baseline instead of ad hoc prompt edits.
+- **Cons:** Best practices are generic; they still need adaptation to the task and output contract.
 
 ### clarity
-**Pros:** Lower ambiguity means fewer surprises and less downstream correction.
-**Cons:** Over-clarifying can make prompts bloated and harder to maintain.
+- **What it is:** The discipline of making the task, constraints, audience, and desired output unambiguous.
+- **When to use:** Use it when a scenario involves clarity and asks which mechanism, scope, boundary, or reliability pattern fits.
+- **Pros:** Lower ambiguity means fewer surprises and less downstream correction.
+- **Cons:** Over-clarifying can make prompts bloated and harder to maintain.
 
 ### examples
-**Pros:** Show the model the target shape directly, which is often the fastest path to consistency.
-**Cons:** Bad examples teach bad behavior; too many examples can crowd out the actual task.
+- **What it is:** Concrete demonstrations of the desired behavior or output shape.
+- **When to use:** Use it when a scenario involves examples and asks which mechanism, scope, boundary, or reliability pattern fits.
+- **Pros:** Show the model the target shape directly, which is often the fastest path to consistency.
+- **Cons:** Bad examples teach bad behavior; too many examples can crowd out the actual task.
 
 ### XML structuring
-**Pros:** Good for chunking instructions, roles, and content boundaries.
-**Cons:** If the structure is decorative rather than functional, it just adds noise.
+- **What it is:** Using XML-style tags to separate instructions, context, examples, and output fields.
+- **When to use:** Use it when a scenario involves XML structuring and asks which mechanism, scope, boundary, or reliability pattern fits.
+- **Pros:** Good for chunking instructions, roles, and content boundaries.
+- **Cons:** If the structure is decorative rather than functional, it just adds noise.
 
 ### role prompting
-**Pros:** Helps bias tone, priorities, and decision style.
-**Cons:** The role frame does not guarantee quality if the underlying task is underspecified.
+- **What it is:** Framing Claude with a role, perspective, or decision style to bias how it approaches the task.
+- **When to use:** Use it when a scenario involves role prompting and asks which mechanism, scope, boundary, or reliability pattern fits.
+- **Pros:** Helps bias tone, priorities, and decision style.
+- **Cons:** The role frame does not guarantee quality if the underlying task is underspecified.
 
 ### thinking
-**Pros:** Gives the model room to reason through tricky cases.
-**Cons:** More thinking is not a substitute for better constraints or examples.
+- **What it is:** Giving the model room or instruction to reason through a problem before producing the final answer.
+- **When to use:** Use it when a scenario involves thinking and asks which mechanism, scope, boundary, or reliability pattern fits.
+- **Pros:** Gives the model room to reason through tricky cases.
+- **Cons:** More thinking is not a substitute for better constraints or examples.
 
 ### prompt chaining
-**Pros:** Breaks large tasks into verifiable steps.
-**Cons:** Adds orchestration overhead and can compound errors between stages.
+- **What it is:** Splitting a complex task into multiple prompts where each step produces input for the next.
+- **When to use:** Use it when a task is easier to validate as ordered intermediate steps.
+
+```mermaid
+flowchart LR
+  A[Step 1 extract] --> B[Step 2 transform]
+  B --> C[Step 3 validate]
+  C --> D[Final answer]
+```
+- **Pros:** Breaks large tasks into verifiable steps.
+- **Cons:** Adds orchestration overhead and can compound errors between stages.
 
 ### structured outputs
-**Pros:** Easier to parse, validate, store, and compare.
-**Cons:** Can be too rigid when the task needs nuance or open-ended synthesis.
+- **What it is:** Constraining responses into predictable formats that can be parsed, validated, or stored.
+- **When to use:** Use it when a program, test, or database needs to consume Claude responses reliably.
+
+```mermaid
+flowchart LR
+  A[Prompt] --> B[Schema-constrained response]
+  B --> C[Validate]
+  C --> D[Parse downstream]
+```
+- **Pros:** Easier to parse, validate, store, and compare.
+- **Cons:** Can be too rigid when the task needs nuance or open-ended synthesis.
 
 ### JSON
-**Pros:** Ideal for downstream automation and schema validation.
-**Cons:** Human readability suffers when the content is mostly narrative.
+- **What it is:** A machine-readable output format suited for APIs, schemas, validation, and downstream automation.
+- **When to use:** Use it when a scenario involves JSON and asks which mechanism, scope, boundary, or reliability pattern fits.
+- **Pros:** Ideal for downstream automation and schema validation.
+- **Cons:** Human readability suffers when the content is mostly narrative.
 
 ### XML
-**Pros:** Flexible for nested sections and bounded fields.
-**Cons:** Verbosity increases quickly, and malformed structure can still happen.
+- **What it is:** A tag-based structure useful for nested sections, named fields, and clear content boundaries.
+- **When to use:** Use it when a scenario involves XML and asks which mechanism, scope, boundary, or reliability pattern fits.
+- **Pros:** Flexible for nested sections and bounded fields.
+- **Cons:** Verbosity increases quickly, and malformed structure can still happen.
 
 ### custom templates
-**Pros:** Capture recurring prompt patterns cleanly.
-**Cons:** Templates invite copy-paste reuse even when the original assumptions no longer hold.
+- **What it is:** Reusable prompt skeletons with variables for repeated tasks.
+- **When to use:** Use it when a scenario involves custom templates and asks which mechanism, scope, boundary, or reliability pattern fits.
+- **Pros:** Capture recurring prompt patterns cleanly.
+- **Cons:** Templates invite copy-paste reuse even when the original assumptions no longer hold.
 
 ### response prefill
-**Pros:** Strong way to anchor the model into a desired structure or style.
-**Cons:** Prefill can overconstrain the response if the task needs creativity.
+- **What it is:** Starting the response with an expected prefix or structure to anchor the output format.
+- **When to use:** Use it when a scenario involves response prefill and asks which mechanism, scope, boundary, or reliability pattern fits.
+- **Pros:** Strong way to anchor the model into a desired structure or style.
+- **Cons:** Prefill can overconstrain the response if the task needs creativity.
 
 ### output consistency
-**Pros:** The main requirement for production pipelines, evals, and comparison work.
-**Cons:** Consistency can come at the cost of variety or exploration.
+- **What it is:** The property that repeated runs produce stable shape, style, and decision behavior.
+- **When to use:** Use it when a scenario involves output consistency and asks which mechanism, scope, boundary, or reliability pattern fits.
+- **Pros:** The main requirement for production pipelines, evals, and comparison work.
+- **Cons:** Consistency can come at the cost of variety or exploration.
 
 ### few-shot examples
-**Pros:** Better than vague prose when the output has subtle boundaries.
-**Cons:** The model can overfit to the examples instead of the task.
+- **What it is:** A prompting method that shows multiple input-output examples before asking for a new output.
+- **When to use:** Use it when a scenario involves few-shot examples and asks which mechanism, scope, boundary, or reliability pattern fits.
+- **Pros:** Better than vague prose when the output has subtle boundaries.
+- **Cons:** The model can overfit to the examples instead of the task.
 
 ### explicit criteria prompts
-**Pros:** Make success measurable and easier to review.
-**Cons:** Too many criteria can become conflicting constraints.
+- **What it is:** Prompts that define measurable rules for judging whether an answer is acceptable.
+- **When to use:** Use it when a scenario involves explicit criteria prompts and asks which mechanism, scope, boundary, or reliability pattern fits.
+- **Pros:** Make success measurable and easier to review.
+- **Cons:** Too many criteria can become conflicting constraints.
 
 ### consistency guardrails
-**Pros:** Reduce format drift and quality swings.
-**Cons:** Over-guardrailing can make prompts brittle or overfitted to narrow test cases.
+- **What it is:** Prompt, schema, or validation mechanisms that reduce format drift and inconsistent behavior.
+- **When to use:** Use it when a scenario involves consistency guardrails and asks which mechanism, scope, boundary, or reliability pattern fits.
+- **Pros:** Reduce format drift and quality swings.
+- **Cons:** Over-guardrailing can make prompts brittle or overfitted to narrow test cases.
 
 ### validation-retry loops
-**Pros:** A practical way to enforce correctness without trusting a single pass.
-**Cons:** Retrying blindly can waste time unless the validation signal is meaningful.
+- **What it is:** A loop that checks output against rules or schema and retries with feedback when it fails.
+- **When to use:** Use it when output must satisfy a schema or quality gate before downstream use.
+
+```mermaid
+flowchart TD
+  A[Generate output] --> B{Valid?}
+  B -->|yes| C[Accept]
+  B -->|no| D[Return validation error]
+  D --> A
+```
+- **Pros:** A practical way to enforce correctness without trusting a single pass.
+- **Cons:** Retrying blindly can waste time unless the validation signal is meaningful.
 
 ### self-review passes
-**Pros:** Helps the model catch its own omissions before you do.
-**Cons:** Self-review is still model judgment, not an external ground truth.
+- **What it is:** A second pass where Claude reviews its own output for omissions, contradictions, or rule violations.
+- **When to use:** Use it when a scenario involves self-review passes and asks which mechanism, scope, boundary, or reliability pattern fits.
+- **Pros:** Helps the model catch its own omissions before you do.
+- **Cons:** Self-review is still model judgment, not an external ground truth.
 
 ## Exam pattern
 
