@@ -20,15 +20,15 @@ The wrong answer is usually right for a *neighbouring* problem. Pin the exact me
 ### Step 2 — Extract the constraints (these silently eliminate options)
 Scan for constraint phrases. Any option that violates one is **dead on arrival**, no matter how elegant:
 
-| Constraint phrase                             | What it eliminates                                 |
-| --------------------------------------------- | -------------------------------------------------- |
-| "stakeholders rejected filtering"             | Any option that filters/suppresses                 |
-| "without adding human review"                 | Any option with a human step                       |
-| "without reducing capability"                 | Any option that removes tools/features             |
+| Constraint phrase | What it eliminates |
+|---|---|
+| "stakeholders rejected filtering" | Any option that filters/suppresses |
+| "without adding human review" | Any option with a human step |
+| "without reducing capability" | Any option that removes tools/features |
 | "entirely contained within one function/file" | Any option that expands scope (plan mode, explore) |
-| "at the tool interface level"                 | Prompt-instruction answers                         |
-| "fits within the context window"              | File-path / reference answers                      |
-| "built-in persistence not available"          | `--resume` (that's a CLI-only feature)             |
+| "at the tool interface level" | Prompt-instruction answers |
+| "fits within the context window" | File-path / reference answers |
+| "built-in persistence not available" | `--resume` (that's a CLI-only feature) |
 
 **Read constraints BEFORE evaluating options.** This is the single biggest time-saver and the trap you hit most.
 
@@ -101,13 +101,13 @@ Before picking the "best-fit considering everything" option, ask:
 If yes → drop that concern and re-evaluate against only the stated problem.
 
 ### The exam-vs-production split (memorise this)
-| Question signals...                              | Answer for...                                        |
-| ------------------------------------------------ | ---------------------------------------------------- |
-| "Multi-Agent Research System", "research report" | Separate synthesis agent (specialised)               |
-| Simple agentic coding, 1–2 subagents             | Coordinator can synthesise itself (like Claude Code) |
-| "fits within context window"                     | Pass by value (inline)                               |
-| "500K tokens" / "too large"                      | Pass by reference (file path / retrieval)            |
-| Names a constraint you'd normally trade off      | Honour the constraint absolutely; don't trade        |
+| Question signals... | Answer for... |
+|---|---|
+| "Multi-Agent Research System", "research report" | Separate synthesis agent (specialised) |
+| Simple agentic coding, 1–2 subagents | Coordinator can synthesise itself (like Claude Code) |
+| "fits within context window" | Pass by value (inline) |
+| "500K tokens" / "too large" | Pass by reference (file path / retrieval) |
+| Names a constraint you'd normally trade off | Honour the constraint absolutely; don't trade |
 
 ---
 
@@ -115,14 +115,14 @@ If yes → drop that concern and re-evaluate against only the stated problem.
 
 This is the "few-shot vs X" family you hit 5+ times. Lock the signal phrases.
 
-| Problem signature                                                    | Right answer                               | Signal phrases                                                                                       |
-| -------------------------------------------------------------------- | ------------------------------------------ | ---------------------------------------------------------------------------------------------------- |
-| Learn a **consistent pattern / nuanced judgment**                    | **Few-shot examples**                      | "generalise its understanding", "contextual reasoning", prose requirements keep being misinterpreted |
-| **Objective binary classification**, no nuance                       | **Explicit criteria in prompt**            | clear rule exists, just needs stating                                                                |
-| **Too many false positives / floods output** (filtering allowed)     | **Explicit include + exclude criteria**    | "flooded with", "buries the real issues", "only flag X"                                              |
-| Output quality **inconsistent in unpredictable, case-specific ways** | **Self-critique / evaluator-optimizer**    | "varies by case", "different gaps each time", "inconsistent omissions"                               |
-| Need consistent **classification across instances**                  | **Criteria + concrete examples per class** | "same issue rated differently", severity inconsistency                                               |
-| Must **avoid invalid outputs structurally**                          | **Schema enforcement, not prompt**         | "frequently hallucinates parameters", "can ignore the rule"                                          |
+| Problem signature | Right answer | Signal phrases |
+|---|---|---|
+| Learn a **consistent pattern / nuanced judgment** | **Few-shot examples** | "generalise its understanding", "contextual reasoning", prose requirements keep being misinterpreted |
+| **Objective binary classification**, no nuance | **Explicit criteria in prompt** | clear rule exists, just needs stating |
+| **Too many false positives / floods output** (filtering allowed) | **Explicit include + exclude criteria** | "flooded with", "buries the real issues", "only flag X" |
+| Output quality **inconsistent in unpredictable, case-specific ways** | **Self-critique / evaluator-optimizer** | "varies by case", "different gaps each time", "inconsistent omissions" |
+| Need consistent **classification across instances** | **Criteria + concrete examples per class** | "same issue rated differently", severity inconsistency |
+| Must **avoid invalid outputs structurally** | **Schema enforcement, not prompt** | "frequently hallucinates parameters", "can ignore the rule" |
 
 ### Two specific clarifications you needed
 - **Few-shot vs self-critique:** Few-shot teaches a *known* pattern you can demonstrate. Self-critique catches *unknown, variable* gaps you can't enumerate. If you can't list the failure cases (because they differ every time) → self-critique.
@@ -200,14 +200,14 @@ A document agent searching the web = wrong tool scope. Fix = **replace the gener
 ## PART 7 — CLAUDE CODE & TOOLING SPECIFICS
 
 ### Built-in tool selection
-| Need                           | Tool                                                                      |
-| ------------------------------ | ------------------------------------------------------------------------- |
-| Find files by **name/pattern** | **Glob** (`**/V2.*.sql`) — does NOT respect `.gitignore`                  |
-| Find **text inside files**     | **Grep** — DOES skip `.gitignore`                                         |
-| Read file contents             | Read                                                                      |
-| Edit a unique string           | Edit (`old_str` must be **globally unique** — expand anchor until unique) |
-| Overwrite whole file           | Write                                                                     |
-| Structured data (JSON/XML)     | `jq` / `xmlstarlet` — structure-aware, NOT `sed`/`grep`/`str_replace`     |
+| Need | Tool |
+|---|---|
+| Find files by **name/pattern** | **Glob** (`**/V2.*.sql`) — does NOT respect `.gitignore` |
+| Find **text inside files** | **Grep** — DOES skip `.gitignore` |
+| Read file contents | Read |
+| Edit a unique string | Edit (`old_str` must be **globally unique** — expand anchor until unique) |
+| Overwrite whole file | Write |
+| Structured data (JSON/XML) | `jq` / `xmlstarlet` — structure-aware, NOT `sed`/`grep`/`str_replace` |
 
 - Mental model: **"Glob finds files by name. Grep finds lines inside them."**
 - Mental model: **"Text tools see characters. Structure-aware tools see data."** (use jq when "not robust to formatting" / "could modify other data")
@@ -221,21 +221,21 @@ A document agent searching the web = wrong tool scope. Fix = **replace the gener
 - Version-controlled review criteria in CI/CD → put in repo's `CLAUDE.md` (NOT env vars, NOT machine-level config).
 
 ### Custom Slash Commands — frontmatter is the enforcement layer
-| Frontmatter     | Solves                                           |
-| --------------- | ------------------------------------------------ |
+| Frontmatter | Solves |
+|---|---|
 | `argument-hint` | Missing args (autocomplete prompt at invocation) |
-| `context: fork` | Context bleeding (isolated subagent execution)   |
-| `allowed-tools` | Destructive/unwanted tool calls (whitelist)      |
-| `description`   | Discoverability                                  |
-| `model`         | Cost/quality routing                             |
+| `context: fork` | Context bleeding (isolated subagent execution) |
+| `allowed-tools` | Destructive/unwanted tool calls (whitelist) |
+| `description` | Discoverability |
+| `model` | Cost/quality routing |
 - Mental model: **"Frontmatter is the schema layer. SKILL.md content is the prompt layer."** Three failures → three frontmatter features.
 
 ### Plan mode vs direct execution vs explore subagent
-| Situation                                             | Use                                                                 |
-| ----------------------------------------------------- | ------------------------------------------------------------------- |
-| Scope fully known, single file/function, simple       | **Direct execution**                                                |
-| Scope unclear, multi-file, architectural implications | **Plan mode**                                                       |
-| Need to understand codebase first                     | **Explore subagent**                                                |
+| Situation | Use |
+|---|---|
+| Scope fully known, single file/function, simple | **Direct execution** |
+| Scope unclear, multi-file, architectural implications | **Plan mode** |
+| Need to understand codebase first | **Explore subagent** |
 | A phase produces verbose output that pollutes context | **Explore/subagent isolation** (BEFORE bloat, not `/compact` after) |
 - Context management hierarchy: **1) prevent bloat (subagent) > 2) reference-not-content > 3) `/compact` (reactive) > 4) `--resume` new session.** You keep reaching for `/compact` (reactive) when subagent isolation (preventive) is available.
 
@@ -255,11 +255,11 @@ A document agent searching the web = wrong tool scope. Fix = **replace the gener
 - Schema enforcement (optional fields + extraction instruction) beats forcing required fields (causes hallucination) or optional-only (causes omission).
 
 ### tool_choice
-| Value                        | Guarantee                          |
-| ---------------------------- | ---------------------------------- |
-| `{"type":"auto"}`            | may call a tool or respond in text |
-| `{"type":"any"}`             | must call SOME tool                |
-| `{"type":"tool","name":"X"}` | must call tool X specifically      |
+| Value | Guarantee |
+|---|---|
+| `{"type":"auto"}` | may call a tool or respond in text |
+| `{"type":"any"}` | must call SOME tool |
+| `{"type":"tool","name":"X"}` | must call tool X specifically |
 - `disable_parallel_tool_use: true` → exactly one tool call.
 - **Incompatible with extended thinking** (`any`/`tool` error with thinking).
 - It's a **turn-level execution constraint** — controls IF a tool is called, NOT which gets selected accurately or argument quality. Don't use it to fix selection/hallucination problems (those are structural).

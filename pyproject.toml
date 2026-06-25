@@ -5,13 +5,13 @@ description = "AI Engineer learning path — notebooks and scripts for all modul
 requires-python = ">=3.14"
 
 dependencies = [
-  "jupyterlab>=4.5.8",
+  "jupyterlab>=4.6.0",
   "matplotlib>=3.11.0",
   "mcp>=1.28.0",
   "numpy>=2.4.6",
   "pandas>=3.0.3",
   "pydantic>=2.13.4",
-  "pydantic-settings>=2.14.1",
+  "pydantic-settings>=2.14.2",
   "pyright>=1.1.411",
   "python-lsp-server>=1.14.0",
   "seaborn>=0.13.2",
