@@ -1,5 +1,5 @@
 """
-Centralised configuration for the entire AI Engineer repo.
+Centralized configuration for the entire AI Engineer repo.
 
 Reads all settings from the root .env file via pydantic-settings.
 Import `settings` from any module or notebook:
